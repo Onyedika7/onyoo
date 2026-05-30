@@ -1,0 +1,873 @@
+{
+  "user": {
+    "id": "user_bb0851fa-7366-4ccc-a8ae-d3b278fcd60e",
+    "googleId": null,
+    "name": "Codex Test User",
+    "email": "codex.test.1780170228795@example.com",
+    "picture": null,
+    "provider": "password",
+    "signedInAt": "2026-05-30T19:47:46.633Z"
+  },
+  "business": {
+    "name": "DebtTrack Pro",
+    "reminderTone": "Friendly",
+    "currency": "USD",
+    "defaultReminderDays": 3
+  },
+  "integrations": {
+    "google": {
+      "connected": true,
+      "email": "alex.morgan@gmail.com",
+      "connectedAt": "2026-05-13T09:32:01.073Z"
+    },
+    "calendar": {
+      "connected": true,
+      "connectedAt": "2026-05-13T16:51:00.986Z",
+      "calendarName": "DebtTrack Collections",
+      "email": "alex.morgan@gmail.com"
+    },
+    "whatsapp": {
+      "connected": true,
+      "connectedAt": "2026-05-12T12:59:39.077Z",
+      "phone": "+1 555-0000"
+    },
+    "email": {
+      "connected": true,
+      "connectedAt": "2026-05-12T12:59:40.839Z",
+      "address": "alex.morgan@gmail.com"
+    }
+  },
+  "customers": [
+    {
+      "id": "cus_d32ece3e-9e2f-4b36-976d-d05049d17e22",
+      "ownerId": "user_bb0851fa-7366-4ccc-a8ae-d3b278fcd60e",
+      "name": "Amina Mensah",
+      "phone": "+2348012345678",
+      "email": "amina@example.com",
+      "notes": "Browser test customer",
+      "createdAt": "2026-05-30T19:44:15.823Z"
+    },
+    {
+      "id": "cus_aa875263-a3f9-4ba2-860f-97df2a7cdd65",
+      "ownerId": "user_fed64484-d087-4736-b939-a5e365579d40",
+      "name": "brilliant",
+      "phone": "08134281996",
+      "email": "HHHHHH@GMAIL.COM",
+      "notes": "",
+      "createdAt": "2026-05-23T09:44:10.982Z"
+    },
+    {
+      "id": "cus_c77bc2c7-a25c-4497-8241-87b2297d6509",
+      "ownerId": "user_8f81aa44-ba3f-488e-8c90-fe0491acc365",
+      "name": "Currency Conversion Test",
+      "phone": "+1 555-2026",
+      "email": "",
+      "notes": "",
+      "createdAt": "2026-05-23T09:42:03.653Z"
+    },
+    {
+      "id": "cus_7cad2495-f250-42ed-9219-d8f7f7f334c8",
+      "name": "Dummy Debt Track",
+      "phone": "+1 555-3434",
+      "email": "dummy.debt@example.com",
+      "notes": "Dummy customer for debt tracking browser test",
+      "createdAt": "2026-05-12T12:29:42.626Z"
+    },
+    {
+      "id": "cus_john",
+      "name": "John Doe",
+      "email": "john.doe@gmail.com",
+      "phone": "+1 555-0101",
+      "notes": "Prefers WhatsApp reminders.",
+      "createdAt": "2026-05-12T12:14:57.796Z"
+    },
+    {
+      "id": "cus_sarah",
+      "name": "Sarah Johnson",
+      "email": "sarah.j@outlook.com",
+      "phone": "+1 555-0142",
+      "notes": "Usually pays in two parts.",
+      "createdAt": "2026-05-12T12:14:57.796Z"
+    },
+    {
+      "id": "cus_michael",
+      "name": "Michael Brown",
+      "email": "m.brown@yahoo.com",
+      "phone": "+1 555-0198",
+      "notes": "",
+      "createdAt": "2026-05-12T12:14:57.796Z"
+    },
+    {
+      "id": "cus_emily",
+      "name": "Emily Davis",
+      "email": "emily.d@gmail.com",
+      "phone": "+1 555-0210",
+      "notes": "",
+      "createdAt": "2026-05-12T12:14:57.796Z"
+    }
+  ],
+  "debts": [
+    {
+      "id": "deb_0986c878-3ce4-4df4-a98d-efbb3a7fd57e",
+      "ownerId": "user_bb0851fa-7366-4ccc-a8ae-d3b278fcd60e",
+      "customerId": "cus_d32ece3e-9e2f-4b36-976d-d05049d17e22",
+      "amount": 12000,
+      "dueDate": "2026-06-15",
+      "proof": "invoice-browser-test.pdf",
+      "description": "Laptop repair balance",
+      "createdAt": "2026-05-30T19:44:39.365Z",
+      "paid": 4500,
+      "status": "partial"
+    },
+    {
+      "id": "deb_81e0fec3-7f10-44e6-a720-4e33ee571f08",
+      "ownerId": "user_fed64484-d087-4736-b939-a5e365579d40",
+      "customerId": "cus_aa875263-a3f9-4ba2-860f-97df2a7cdd65",
+      "amount": 3000,
+      "dueDate": "2026-05-23",
+      "proof": "",
+      "description": "",
+      "createdAt": "2026-05-23T09:44:29.430Z",
+      "paid": 0,
+      "status": "unpaid"
+    },
+    {
+      "id": "deb_e1e7c717-9bf4-46f8-87be-877864683944",
+      "ownerId": "user_8f81aa44-ba3f-488e-8c90-fe0491acc365",
+      "customerId": "cus_c77bc2c7-a25c-4497-8241-87b2297d6509",
+      "amount": 83259.46,
+      "dueDate": "2026-06-15",
+      "proof": "",
+      "description": "Currency conversion debt",
+      "createdAt": "2026-05-23T09:42:11.835Z",
+      "paid": 0,
+      "status": "unpaid"
+    },
+    {
+      "id": "deb_994e8a4d-fa28-41e6-baa1-d079ad7daee0",
+      "customerId": "cus_7cad2495-f250-42ed-9219-d8f7f7f334c8",
+      "amount": 999,
+      "dueDate": "2026-06-01",
+      "proof": "dummy-proof.pdf",
+      "description": "Dummy track debt invoice",
+      "createdAt": "2026-05-12T12:30:04.975Z",
+      "paid": 250,
+      "status": "partial"
+    },
+    {
+      "id": "debt_1",
+      "customerId": "cus_john",
+      "amount": 2500,
+      "paid": 0,
+      "dueDate": "2026-05-04",
+      "description": "Business supplies invoice",
+      "proof": "invoice-john.pdf",
+      "status": "overdue",
+      "createdAt": "2026-05-12T12:14:57.796Z"
+    },
+    {
+      "id": "debt_2",
+      "customerId": "cus_sarah",
+      "amount": 1200,
+      "paid": 600,
+      "dueDate": "2026-05-16",
+      "description": "Service balance",
+      "proof": "signed-agreement.png",
+      "status": "partial",
+      "createdAt": "2026-05-12T12:14:57.796Z"
+    },
+    {
+      "id": "debt_3",
+      "customerId": "cus_michael",
+      "amount": 3800,
+      "paid": 0,
+      "dueDate": "2026-05-20",
+      "description": "Bulk order",
+      "proof": "",
+      "status": "unpaid",
+      "createdAt": "2026-05-12T12:14:57.796Z"
+    },
+    {
+      "id": "debt_4",
+      "customerId": "cus_emily",
+      "amount": 950,
+      "paid": 0,
+      "dueDate": "2026-05-24",
+      "description": "Monthly credit",
+      "proof": "",
+      "status": "unpaid",
+      "createdAt": "2026-05-12T12:14:57.796Z"
+    }
+  ],
+  "payments": [
+    {
+      "id": "pay_fa2517be-1e64-4c15-9b0d-5b1e0ab5fbac",
+      "ownerId": "user_bb0851fa-7366-4ccc-a8ae-d3b278fcd60e",
+      "customerId": "cus_d32ece3e-9e2f-4b36-976d-d05049d17e22",
+      "debtId": "deb_0986c878-3ce4-4df4-a98d-efbb3a7fd57e",
+      "amount": 4500,
+      "method": "Cash",
+      "note": "Partial browser test payment",
+      "paidAt": "2026-05-30",
+      "receiptNo": "RCT-1003",
+      "createdAt": "2026-05-30T19:44:55.645Z"
+    },
+    {
+      "id": "pay_8ee43d0c-d857-45aa-936f-2cf8a14381c6",
+      "customerId": "cus_7cad2495-f250-42ed-9219-d8f7f7f334c8",
+      "debtId": "deb_994e8a4d-fa28-41e6-baa1-d079ad7daee0",
+      "amount": 250,
+      "method": "Cash",
+      "note": "Dummy partial payment test",
+      "paidAt": "2026-05-12",
+      "receiptNo": "RCT-1002",
+      "createdAt": "2026-05-12T12:30:24.898Z"
+    },
+    {
+      "id": "pay_1",
+      "customerId": "cus_sarah",
+      "debtId": "debt_2",
+      "amount": 600,
+      "method": "Cash",
+      "note": "First partial payment",
+      "receiptNo": "RCT-1001",
+      "paidAt": "2026-05-09",
+      "createdAt": "2026-05-12T12:14:57.796Z"
+    }
+  ],
+  "reminders": [
+    {
+      "id": "rem_a06444c5-6c86-48a6-a583-b68dd528516e",
+      "ownerId": "user_bb0851fa-7366-4ccc-a8ae-d3b278fcd60e",
+      "customerId": "cus_d32ece3e-9e2f-4b36-976d-d05049d17e22",
+      "debtId": "deb_0986c878-3ce4-4df4-a98d-efbb3a7fd57e",
+      "channel": "WhatsApp",
+      "tone": "Friendly",
+      "scheduledFor": "2026-06-10",
+      "message": "Hello Amina, please remember the remaining balance.",
+      "createdAt": "2026-05-30T19:45:27.701Z",
+      "status": "sent",
+      "sentAt": "2026-05-30T19:45:29.298Z"
+    },
+    {
+      "id": "rem_075c9dbe-b197-4453-9203-bb44d1e6aa10",
+      "ownerId": "user_fed64484-d087-4736-b939-a5e365579d40",
+      "customerId": "cus_aa875263-a3f9-4ba2-860f-97df2a7cdd65",
+      "debtId": "deb_81e0fec3-7f10-44e6-a720-4e33ee571f08",
+      "channel": "WhatsApp",
+      "tone": "Friendly",
+      "scheduledFor": "2026-05-23",
+      "message": "Hi, this is a reminder about your outstanding payment.",
+      "createdAt": "2026-05-23T09:45:24.782Z",
+      "status": "sent",
+      "sentAt": "2026-05-23T09:45:40.749Z"
+    },
+    {
+      "id": "rem_c18da0a1-ab39-4f36-8fb1-0d9b7a43c914",
+      "customerId": "cus_7cad2495-f250-42ed-9219-d8f7f7f334c8",
+      "debtId": "deb_994e8a4d-fa28-41e6-baa1-d079ad7daee0",
+      "channel": "WhatsApp",
+      "tone": "Friendly",
+      "scheduledFor": "2026-05-13",
+      "message": "Dummy reminder for remaining debt balance",
+      "createdAt": "2026-05-12T12:30:58.829Z",
+      "status": "sent",
+      "sentAt": "2026-05-12T12:31:00.684Z"
+    },
+    {
+      "id": "rem_1",
+      "customerId": "cus_john",
+      "debtId": "debt_1",
+      "channel": "WhatsApp",
+      "tone": "Firm",
+      "scheduledFor": "2026-05-12",
+      "status": "scheduled",
+      "message": "Hi John, your payment is overdue. Please let us know when you can settle it.",
+      "createdAt": "2026-05-12T12:14:57.796Z"
+    },
+    {
+      "id": "rem_2",
+      "customerId": "cus_sarah",
+      "debtId": "debt_2",
+      "channel": "WhatsApp",
+      "tone": "Friendly",
+      "scheduledFor": "2026-05-14",
+      "status": "scheduled",
+      "message": "Hi Sarah, this is a friendly reminder about your upcoming balance.",
+      "createdAt": "2026-05-12T12:14:57.796Z"
+    }
+  ],
+  "calendarEvents": [
+    {
+      "id": "cal_ff9a989d-905e-463f-819d-c65801e99f23",
+      "ownerId": "user_bb0851fa-7366-4ccc-a8ae-d3b278fcd60e",
+      "title": "Follow-up call with Amina",
+      "customerId": "cus_d32ece3e-9e2f-4b36-976d-d05049d17e22",
+      "debtId": "deb_0986c878-3ce4-4df4-a98d-efbb3a7fd57e",
+      "date": "2026-06-12",
+      "time": "10:30",
+      "createdAt": "2026-05-30T19:45:44.276Z",
+      "source": "local"
+    },
+    {
+      "id": "cal_68bc1ce7-d388-4a73-8a85-c2e49711e0c6",
+      "title": "Follow-up: Dummy Debt Track",
+      "customerId": "cus_7cad2495-f250-42ed-9219-d8f7f7f334c8",
+      "debtId": "deb_994e8a4d-fa28-41e6-baa1-d079ad7daee0",
+      "date": "2026-05-13",
+      "time": "1200",
+      "createdAt": "2026-05-12T13:00:04.596Z",
+      "source": "local"
+    },
+    {
+      "id": "evt_1",
+      "title": "Payment follow-up: John Doe",
+      "customerId": "cus_john",
+      "debtId": "debt_1",
+      "date": "2026-05-12",
+      "time": "10:00",
+      "source": "local",
+      "createdAt": "2026-05-12T12:14:57.796Z"
+    },
+    {
+      "id": "evt_2",
+      "title": "Promise to pay: Sarah Johnson",
+      "customerId": "cus_sarah",
+      "debtId": "debt_2",
+      "date": "2026-05-14",
+      "time": "12:30",
+      "source": "local",
+      "createdAt": "2026-05-12T12:14:57.796Z"
+    }
+  ],
+  "uploads": [
+    {
+      "id": "upl_1",
+      "name": "invoice-john.pdf",
+      "customerId": "cus_john",
+      "debtId": "debt_1",
+      "type": "proof",
+      "uploadedAt": "2026-05-12T12:14:57.796Z"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "log_865a111d-e817-4fa5-b986-10d8918928fe",
+      "ownerId": "user_bb0851fa-7366-4ccc-a8ae-d3b278fcd60e",
+      "action": "Password login",
+      "detail": "codex.test.1780170228795@example.com signed in.",
+      "createdAt": "2026-05-30T19:47:46.633Z"
+    },
+    {
+      "id": "log_4f76a26e-7705-4180-bfec-ddb0fceddc2d",
+      "ownerId": "user_bb0851fa-7366-4ccc-a8ae-d3b278fcd60e",
+      "action": "Settings updated",
+      "detail": "Business settings were saved.",
+      "createdAt": "2026-05-30T19:46:16.861Z"
+    },
+    {
+      "id": "log_21d9c5f3-0cf2-4e85-b1e4-20a7d2bbfc9e",
+      "ownerId": "user_bb0851fa-7366-4ccc-a8ae-d3b278fcd60e",
+      "action": "calendarEvents created",
+      "detail": "Follow-up call with Amina",
+      "createdAt": "2026-05-30T19:45:44.276Z"
+    },
+    {
+      "id": "log_8de31afe-0343-4416-ba1b-c2f2fef3998c",
+      "ownerId": "user_bb0851fa-7366-4ccc-a8ae-d3b278fcd60e",
+      "action": "Reminder sent",
+      "detail": "WhatsApp reminder sent to Amina Mensah.",
+      "createdAt": "2026-05-30T19:45:29.298Z"
+    },
+    {
+      "id": "log_13bf30c7-3386-4eee-9b9c-a7464e81b166",
+      "ownerId": "user_bb0851fa-7366-4ccc-a8ae-d3b278fcd60e",
+      "action": "reminders created",
+      "detail": "Hello Amina, please remember the remaining balance.",
+      "createdAt": "2026-05-30T19:45:27.701Z"
+    },
+    {
+      "id": "log_25b52a09-1c8a-4f07-9c1b-8fd8ad6e7bf2",
+      "ownerId": "user_bb0851fa-7366-4ccc-a8ae-d3b278fcd60e",
+      "action": "Payment recorded",
+      "detail": "Amina Mensah paid $4500.00.",
+      "createdAt": "2026-05-30T19:44:55.645Z"
+    },
+    {
+      "id": "log_0b85fc14-b941-4ab1-895d-b7eaa9416cec",
+      "ownerId": "user_bb0851fa-7366-4ccc-a8ae-d3b278fcd60e",
+      "action": "debts created",
+      "detail": "Laptop repair balance",
+      "createdAt": "2026-05-30T19:44:39.366Z"
+    },
+    {
+      "id": "log_4641a7a0-0a5a-4f2b-8ece-cc9273741beb",
+      "ownerId": "user_bb0851fa-7366-4ccc-a8ae-d3b278fcd60e",
+      "action": "customers created",
+      "detail": "Amina Mensah",
+      "createdAt": "2026-05-30T19:44:15.823Z"
+    },
+    {
+      "id": "log_5c843e4d-14a7-4b59-acbb-034fc98365d6",
+      "ownerId": "user_bb0851fa-7366-4ccc-a8ae-d3b278fcd60e",
+      "action": "Account registered",
+      "detail": "codex.test.1780170228795@example.com created an account.",
+      "createdAt": "2026-05-30T19:43:51.178Z"
+    },
+    {
+      "id": "log_f47e695f-73f9-4fe9-b2ce-d65cafcb5728",
+      "ownerId": "user_fed64484-d087-4736-b939-a5e365579d40",
+      "action": "Integration connected",
+      "detail": "calendar connected.",
+      "createdAt": "2026-05-23T09:46:28.286Z"
+    },
+    {
+      "id": "log_ea0c343b-e146-471e-acc8-f1b8d3b29099",
+      "ownerId": "user_fed64484-d087-4736-b939-a5e365579d40",
+      "action": "Reminder sent",
+      "detail": "WhatsApp reminder sent to brilliant.",
+      "createdAt": "2026-05-23T09:45:40.749Z"
+    },
+    {
+      "id": "log_b52b2e70-8e16-4fd0-aa69-e7c5984b2aaf",
+      "ownerId": "user_fed64484-d087-4736-b939-a5e365579d40",
+      "action": "reminders created",
+      "detail": "Hi, this is a reminder about your outstanding payment.",
+      "createdAt": "2026-05-23T09:45:24.782Z"
+    },
+    {
+      "id": "log_47480429-c66d-4ba3-b696-141fce14e891",
+      "ownerId": "user_fed64484-d087-4736-b939-a5e365579d40",
+      "action": "Settings updated",
+      "detail": "Business settings were saved.",
+      "createdAt": "2026-05-23T09:44:42.494Z"
+    },
+    {
+      "id": "log_87deb3dc-2972-4ae0-b23c-352e6226b4fa",
+      "ownerId": "user_fed64484-d087-4736-b939-a5e365579d40",
+      "action": "debts created",
+      "detail": "deb_81e0fec3-7f10-44e6-a720-4e33ee571f08",
+      "createdAt": "2026-05-23T09:44:29.430Z"
+    },
+    {
+      "id": "log_68f641d2-ecdf-43da-bea8-fa802cdfcf7e",
+      "ownerId": "user_fed64484-d087-4736-b939-a5e365579d40",
+      "action": "customers created",
+      "detail": "brilliant",
+      "createdAt": "2026-05-23T09:44:10.982Z"
+    },
+    {
+      "id": "log_118a9815-6777-498f-949c-a9c92418de3e",
+      "ownerId": "user_8f81aa44-ba3f-488e-8c90-fe0491acc365",
+      "action": "Settings updated",
+      "detail": "Business settings were saved.",
+      "createdAt": "2026-05-23T09:42:33.992Z"
+    },
+    {
+      "id": "log_16bdb1b6-1cab-4c87-953d-9fa083e4f83f",
+      "ownerId": "user_8f81aa44-ba3f-488e-8c90-fe0491acc365",
+      "action": "Settings updated",
+      "detail": "Business settings were saved.",
+      "createdAt": "2026-05-23T09:42:25.168Z"
+    },
+    {
+      "id": "log_535cc1e5-910e-458c-a52e-a256126f7bb5",
+      "ownerId": "user_8f81aa44-ba3f-488e-8c90-fe0491acc365",
+      "action": "Settings updated",
+      "detail": "Business settings were saved.",
+      "createdAt": "2026-05-23T09:42:16.400Z"
+    },
+    {
+      "id": "log_cf282af8-6338-446c-9d37-47ecf8d136b4",
+      "ownerId": "user_8f81aa44-ba3f-488e-8c90-fe0491acc365",
+      "action": "debts created",
+      "detail": "Currency conversion debt",
+      "createdAt": "2026-05-23T09:42:11.836Z"
+    },
+    {
+      "id": "log_7b3e1c34-b8f3-4fc1-ad1d-5db22e7a0a42",
+      "ownerId": "user_8f81aa44-ba3f-488e-8c90-fe0491acc365",
+      "action": "customers created",
+      "detail": "Currency Conversion Test",
+      "createdAt": "2026-05-23T09:42:03.653Z"
+    },
+    {
+      "id": "log_ad5d44e3-2c6e-468b-98f7-3db41e01911f",
+      "ownerId": "user_8f81aa44-ba3f-488e-8c90-fe0491acc365",
+      "action": "Settings updated",
+      "detail": "Business settings were saved.",
+      "createdAt": "2026-05-23T09:41:35.378Z"
+    },
+    {
+      "id": "log_b216a81a-8bef-4a7b-acbf-eb0447c401a3",
+      "ownerId": "user_8f81aa44-ba3f-488e-8c90-fe0491acc365",
+      "action": "Settings updated",
+      "detail": "Business settings were saved.",
+      "createdAt": "2026-05-23T09:41:24.804Z"
+    },
+    {
+      "id": "log_481d725c-08f0-4d6f-90f8-6092606c6b23",
+      "ownerId": "user_8f81aa44-ba3f-488e-8c90-fe0491acc365",
+      "action": "Settings updated",
+      "detail": "Business settings were saved.",
+      "createdAt": "2026-05-23T09:41:14.194Z"
+    },
+    {
+      "id": "log_fb1d39ad-66a6-404c-893c-dfca6d77683c",
+      "ownerId": "user_fed64484-d087-4736-b939-a5e365579d40",
+      "action": "customers deleted",
+      "detail": "JOHN",
+      "createdAt": "2026-05-22T09:03:00.467Z"
+    },
+    {
+      "id": "log_352ac994-3363-479b-b256-a03a433b5fbe",
+      "ownerId": "user_8f81aa44-ba3f-488e-8c90-fe0491acc365",
+      "action": "Settings updated",
+      "detail": "Business settings were saved.",
+      "createdAt": "2026-05-22T09:01:03.042Z"
+    },
+    {
+      "id": "log_7056c31d-fa11-4cfd-990b-7c791dd8d4b9",
+      "ownerId": "user_8f81aa44-ba3f-488e-8c90-fe0491acc365",
+      "action": "Settings updated",
+      "detail": "Business settings were saved.",
+      "createdAt": "2026-05-22T09:00:51.299Z"
+    },
+    {
+      "id": "log_bb952e43-2f4d-4531-b195-c80a3a495b1b",
+      "ownerId": "user_8f81aa44-ba3f-488e-8c90-fe0491acc365",
+      "action": "Settings updated",
+      "detail": "Business settings were saved.",
+      "createdAt": "2026-05-22T09:00:39.703Z"
+    },
+    {
+      "id": "log_bb3f0cd1-615d-4ba8-9621-1e96c51a1735",
+      "ownerId": "user_fed64484-d087-4736-b939-a5e365579d40",
+      "action": "Password login",
+      "detail": "johnpaulnduka21@gmail.com signed in.",
+      "createdAt": "2026-05-22T08:56:13.533Z"
+    },
+    {
+      "id": "log_a37e2fcb-5fc3-42f0-8359-2cea5b471215",
+      "ownerId": "user_fed64484-d087-4736-b939-a5e365579d40",
+      "action": "customers created",
+      "detail": "JOHN",
+      "createdAt": "2026-05-22T08:55:22.489Z"
+    },
+    {
+      "id": "log_c0f206a9-6be5-40e5-95e5-052a4bab4a53",
+      "ownerId": "user_8f81aa44-ba3f-488e-8c90-fe0491acc365",
+      "action": "Settings updated",
+      "detail": "Business settings were saved.",
+      "createdAt": "2026-05-22T08:53:50.978Z"
+    },
+    {
+      "id": "log_462c8276-596a-4c50-af1f-1a8f786161e1",
+      "action": "Account registered",
+      "detail": "johnpaulnduka21@gmail.com created an account.",
+      "createdAt": "2026-05-22T08:41:24.375Z"
+    },
+    {
+      "id": "log_45efed12-fe6c-469b-935b-d2c81d68c84d",
+      "action": "Password login",
+      "detail": "login1779438831332@example.com signed in.",
+      "createdAt": "2026-05-22T08:34:05.720Z"
+    },
+    {
+      "id": "log_ac945b09-bb9e-412c-a409-e09b9fc64671",
+      "action": "Account registered",
+      "detail": "login1779438831332@example.com created an account.",
+      "createdAt": "2026-05-22T08:33:54.952Z"
+    },
+    {
+      "id": "log_83f38e62-f56a-46bd-8f9c-1123b35b872a",
+      "action": "Account registered",
+      "detail": "auth1779438787406@example.com created an account.",
+      "createdAt": "2026-05-22T08:33:09.356Z"
+    },
+    {
+      "id": "log_625101f4-2ec4-4150-bfc8-80cf4cb1aa52",
+      "action": "Integration connected",
+      "detail": "calendar connected.",
+      "createdAt": "2026-05-13T16:51:00.986Z"
+    },
+    {
+      "id": "log_81e4e5aa-1efb-4329-a039-6907e5fba3b0",
+      "action": "Integration connected",
+      "detail": "calendar connected.",
+      "createdAt": "2026-05-13T09:52:36.344Z"
+    },
+    {
+      "id": "log_77faf891-4c86-4f20-998e-66ef14a3a50d",
+      "action": "Integration disconnected",
+      "detail": "calendar disconnected.",
+      "createdAt": "2026-05-13T09:52:35.577Z"
+    },
+    {
+      "id": "log_17224407-ee63-4d0c-8a7d-de314fb70ccd",
+      "action": "Integration connected",
+      "detail": "calendar connected.",
+      "createdAt": "2026-05-13T09:45:02.489Z"
+    },
+    {
+      "id": "log_706c7769-fb99-46d5-b4fb-adae65a33343",
+      "action": "Integration connected",
+      "detail": "calendar connected.",
+      "createdAt": "2026-05-13T09:44:59.098Z"
+    },
+    {
+      "id": "log_6d5eb61c-8092-4504-a6c4-eb23fff2060f",
+      "action": "Google login",
+      "detail": "alex.morgan@gmail.com signed in with Google.",
+      "createdAt": "2026-05-13T09:32:01.073Z"
+    },
+    {
+      "id": "log_5bc0173b-b6d3-4c71-bea3-11ff0b63a370",
+      "action": "calendarEvents created",
+      "detail": "Follow-up: Dummy Debt Track",
+      "createdAt": "2026-05-12T13:00:04.596Z"
+    },
+    {
+      "id": "log_ebf94eb1-35fc-4208-97e4-e902fa13bf2d",
+      "action": "Integration connected",
+      "detail": "email connected.",
+      "createdAt": "2026-05-12T12:59:40.839Z"
+    },
+    {
+      "id": "log_cbc52a23-3b55-4397-a9f0-c2481d1bc66b",
+      "action": "Integration connected",
+      "detail": "whatsapp connected.",
+      "createdAt": "2026-05-12T12:59:39.077Z"
+    },
+    {
+      "id": "log_f0e85db8-0902-4640-88eb-d0d891d9de6d",
+      "action": "Integration connected",
+      "detail": "calendar connected.",
+      "createdAt": "2026-05-12T12:59:37.014Z"
+    },
+    {
+      "id": "log_aeba4600-6eb4-4c14-a6f9-ee5f3cf5e306",
+      "action": "Google login",
+      "detail": "alex.morgan@gmail.com signed in with Google.",
+      "createdAt": "2026-05-12T12:55:34.812Z"
+    },
+    {
+      "id": "log_e4cb4a05-d33c-4544-ba5e-468271e2def7",
+      "action": "Reminder sent",
+      "detail": "WhatsApp reminder sent to Dummy Debt Track.",
+      "createdAt": "2026-05-12T12:31:00.684Z"
+    },
+    {
+      "id": "log_8c191c22-e3c7-4df3-bb90-6e50bc0dcdbc",
+      "action": "reminders created",
+      "detail": "Dummy reminder for remaining debt balance",
+      "createdAt": "2026-05-12T12:30:58.829Z"
+    },
+    {
+      "id": "log_56cef9c6-e761-4ade-b084-5e3ba51e95b4",
+      "action": "Payment recorded",
+      "detail": "Dummy Debt Track paid $250.00.",
+      "createdAt": "2026-05-12T12:30:24.898Z"
+    },
+    {
+      "id": "log_54bc99c3-0ddb-4cf5-8c79-d02aa49e03ed",
+      "action": "debts created",
+      "detail": "Dummy track debt invoice",
+      "createdAt": "2026-05-12T12:30:04.975Z"
+    },
+    {
+      "id": "log_d852f0f6-8f9c-45fc-8e05-e2b28a79c17d",
+      "action": "customers created",
+      "detail": "Dummy Debt Track",
+      "createdAt": "2026-05-12T12:29:42.626Z"
+    },
+    {
+      "id": "log_39e8969d-4633-43c7-bfdd-8eb488882781",
+      "action": "Google login",
+      "detail": "alex.morgan@gmail.com signed in with Google.",
+      "createdAt": "2026-05-12T12:29:22.176Z"
+    },
+    {
+      "id": "log_05bd2cdb-ff19-4b15-8a0d-fab1a4202975",
+      "action": "Google login",
+      "detail": "alex.morgan@gmail.com signed in with Google.",
+      "createdAt": "2026-05-12T12:22:27.231Z"
+    },
+    {
+      "id": "log_da53233d-03ee-46ae-8cc9-0af6185e4be6",
+      "action": "Google login",
+      "detail": "alex.morgan@gmail.com signed in with Google.",
+      "createdAt": "2026-05-12T12:20:02.068Z"
+    },
+    {
+      "id": "log_468691db-ede9-4c7e-8b9f-5a398763e09c",
+      "action": "Google login",
+      "detail": "alex.morgan@gmail.com signed in with Google.",
+      "createdAt": "2026-05-12T12:19:57.719Z"
+    },
+    {
+      "id": "log_22793564-f13a-4e25-9f81-cc320edc064c",
+      "action": "Google login",
+      "detail": "alex.morgan@gmail.com signed in with Google.",
+      "createdAt": "2026-05-12T12:18:02.957Z"
+    },
+    {
+      "id": "log_cf34c881-cbc0-49d1-83fe-849c8329e3c1",
+      "action": "Google login",
+      "detail": "alex.morgan@gmail.com signed in with Google.",
+      "createdAt": "2026-05-12T12:17:53.819Z"
+    },
+    {
+      "id": "log_81b0cc84-137f-4ec2-8796-8118aa4e5581",
+      "action": "Google login",
+      "detail": "alex.morgan@gmail.com signed in with Google.",
+      "createdAt": "2026-05-12T12:17:51.594Z"
+    },
+    {
+      "id": "log_1",
+      "action": "Seed data created",
+      "detail": "Initial demo workspace generated.",
+      "createdAt": "2026-05-12T12:14:57.796Z"
+    }
+  ],
+  "users": [
+    {
+      "id": "user_9561392f-accd-4a7c-88f7-bcde966da2a0",
+      "name": "Auth Test User",
+      "email": "auth1779438787406@example.com",
+      "passwordHash": "7c13ab2e1d157284ccb11e9737f90cbb611b0acdb8f8dcd4e303a680e58a8b1b",
+      "provider": "password",
+      "createdAt": "2026-05-22T08:33:09.355Z",
+      "lastLoginAt": "2026-05-22T08:33:09.355Z"
+    },
+    {
+      "id": "user_8f81aa44-ba3f-488e-8c90-fe0491acc365",
+      "name": "Login Flow User",
+      "email": "login1779438831332@example.com",
+      "passwordHash": "842c46a14bd46fe38b9a239a39bc151c55663e3b7483ce3f004742302d172dbc",
+      "provider": "password",
+      "createdAt": "2026-05-22T08:33:54.952Z",
+      "lastLoginAt": "2026-05-22T08:34:05.720Z",
+      "business": {
+        "name": "DebtTrack Pro",
+        "reminderTone": "Friendly",
+        "currency": "NGN",
+        "defaultReminderDays": 3,
+        "baseCurrency": "NGN"
+      },
+      "integrations": {
+        "google": {
+          "connected": false,
+          "email": null,
+          "connectedAt": null
+        },
+        "calendar": {
+          "connected": false,
+          "calendarName": null,
+          "connectedAt": null
+        },
+        "whatsapp": {
+          "connected": false,
+          "phone": null,
+          "connectedAt": null
+        },
+        "email": {
+          "connected": false,
+          "address": null,
+          "connectedAt": null
+        }
+      }
+    },
+    {
+      "id": "user_fed64484-d087-4736-b939-a5e365579d40",
+      "name": "collins",
+      "email": "johnpaulnduka21@gmail.com",
+      "passwordHash": "b1abb074532ad4f3a371d8fa408b9d32a8839a79ce956356f22bbd637f10ebb9",
+      "provider": "password",
+      "createdAt": "2026-05-22T08:41:24.375Z",
+      "lastLoginAt": "2026-05-22T08:56:13.533Z",
+      "business": {
+        "name": "DebtTrack Pro",
+        "reminderTone": "Friendly",
+        "currency": "ZAR",
+        "defaultReminderDays": 3,
+        "baseCurrency": "NGN"
+      },
+      "integrations": {
+        "google": {
+          "connected": true,
+          "email": "johnpaulnduka21@gmail.com",
+          "connectedAt": "2026-05-23T09:46:28.286Z"
+        },
+        "calendar": {
+          "connected": true,
+          "connectedAt": "2026-05-23T09:46:28.286Z",
+          "calendarName": "DebtTrack Collections",
+          "email": "johnpaulnduka21@gmail.com"
+        },
+        "whatsapp": {
+          "connected": false,
+          "phone": null,
+          "connectedAt": null
+        },
+        "email": {
+          "connected": false,
+          "address": null,
+          "connectedAt": null
+        }
+      }
+    },
+    {
+      "id": "user_bb0851fa-7366-4ccc-a8ae-d3b278fcd60e",
+      "name": "Codex Test User",
+      "email": "codex.test.1780170228795@example.com",
+      "passwordHash": "724936cd9b665b34b178904d938970b9fffede7f6fcbae3e0f61b87170c06feb",
+      "provider": "password",
+      "business": {
+        "name": "DebtTrack Pro",
+        "reminderTone": "Friendly",
+        "baseCurrency": "NGN",
+        "currency": "KES",
+        "defaultReminderDays": 3
+      },
+      "integrations": {
+        "google": {
+          "connected": false,
+          "email": null,
+          "connectedAt": null
+        },
+        "calendar": {
+          "connected": false,
+          "calendarName": null,
+          "connectedAt": null
+        },
+        "whatsapp": {
+          "connected": false,
+          "phone": null,
+          "connectedAt": null
+        },
+        "email": {
+          "connected": false,
+          "address": null,
+          "connectedAt": null
+        }
+      },
+      "createdAt": "2026-05-30T19:43:51.177Z",
+      "lastLoginAt": "2026-05-30T19:47:46.633Z"
+    }
+  ],
+  "sessions": {
+    "324e169d-a8a5-4a64-973d-3f9ca9ef7028": {
+      "userId": "user_8f81aa44-ba3f-488e-8c90-fe0491acc365",
+      "createdAt": "2026-05-22T08:34:05.720Z"
+    },
+    "a86934ac-c807-44bd-a99d-10c816bb41ff": {
+      "userId": "user_fed64484-d087-4736-b939-a5e365579d40",
+      "createdAt": "2026-05-22T08:56:13.533Z"
+    },
+    "1c28f206-eded-4274-a0c2-ff5bb706c2a9": {
+      "userId": "user_bb0851fa-7366-4ccc-a8ae-d3b278fcd60e",
+      "createdAt": "2026-05-30T19:47:46.633Z"
+    }
+  }
+}

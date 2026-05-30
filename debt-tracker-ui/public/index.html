@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DebtTrack Pro</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div id="publicShell" class="public-shell hidden">
+    <header class="public-nav">
+      <a class="brand public-brand" href="/login" data-route="/login"><span class="brand-mark">D</span><span>DebtTrack Pro</span></a>
+      <nav>
+        <a href="/login" data-route="/login">Login</a>
+        <a class="btn" href="/register" data-route="/register">Sign Up</a>
+      </nav>
+    </header>
+    <main id="publicPage"></main>
+  </div>
+
+  <div id="appShell" class="hidden">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">D</span><span>DebtTrack Pro</span></div>
+      <nav id="nav">
+        <button class="nav-item active" data-page="dashboard">Dashboard</button>
+        <button class="nav-item" data-page="customers">Customers</button>
+        <button class="nav-item" data-page="debts">Debts</button>
+        <button class="nav-item" data-page="payments">Payments</button>
+        <button class="nav-item" data-page="reminders">Reminders</button>
+        <button class="nav-item" data-page="calendar">Calendar</button>
+        <button class="nav-item" data-page="reports">Reports</button>
+        <button class="nav-item" data-page="settings">Settings</button>
+        <button class="nav-item" data-page="logs">Logs</button>
+      </nav>
+      <div class="user-card">
+        <div class="avatar" id="avatar">AM</div>
+        <div>
+          <strong id="userName">Guest Host</strong>
+          <span id="userEmail">Not signed in</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1 id="pageTitle">Dashboard</h1>
+          <p id="pageSubtitle">Track debt, payments, reminders, and collection work.</p>
+        </div>
+        <input id="globalSearch" class="search" placeholder="Search customers, debts, notes">
+        <button class="btn secondary" data-action="logout">Logout</button>
+        <button class="btn" data-action="open-create">Add New</button>
+      </header>
+
+      <section class="page active" id="dashboard"></section>
+      <section class="page" id="customers"></section>
+      <section class="page" id="debts"></section>
+      <section class="page" id="payments"></section>
+      <section class="page" id="reminders"></section>
+      <section class="page" id="calendar"></section>
+      <section class="page" id="reports"></section>
+      <section class="page" id="settings"></section>
+      <section class="page" id="logs"></section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <dialog id="modal">
+    <form id="modalForm" method="dialog">
+      <div class="modal-head">
+        <h2 id="modalTitle">Action</h2>
+        <button class="icon-btn" value="cancel" type="button" data-action="close-modal">x</button>
+      </div>
+      <div id="modalFields" class="form-grid"></div>
+      <div class="modal-actions">
+        <button class="btn secondary" type="button" data-action="close-modal">Cancel</button>
+        <button class="btn" id="modalSubmit" type="submit">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="/app.js"></script>
+</body>
+</html>

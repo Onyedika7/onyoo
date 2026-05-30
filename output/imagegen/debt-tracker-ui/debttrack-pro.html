@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>DebtTrack Pro</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --bg2: #161b27;
+    --bg3: #1e2536;
+    --bg4: #252d3d;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #e8ecf4;
+    --text2: #8a94a8;
+    --text3: #5a6275;
+    --green: #22c55e;
+    --green-dim: rgba(34,197,94,0.12);
+    --yellow: #f59e0b;
+    --yellow-dim: rgba(245,158,11,0.12);
+    --red: #ef4444;
+    --red-dim: rgba(239,68,68,0.12);
+    --blue: #3b82f6;
+    --blue-dim: rgba(59,130,246,0.12);
+    --purple: #a855f7;
+    --accent: #4ade80;
+    --accent-dark: #16a34a;
+    --sidebar-w: 210px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    font-size: 14px;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: var(--sidebar-w);
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--accent), #16a34a);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px; color: #0a1a0a;
+  }
+  .logo-text { font-weight: 600; font-size: 15px; color: var(--text); }
+
+  .nav { padding: 12px 10px; flex: 1; overflow-y: auto; }
+  .nav-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+    color: var(--text3); padding: 8px 8px 4px; text-transform: uppercase;
+  }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 10px; border-radius: 8px; cursor: pointer;
+    color: var(--text2); font-size: 13.5px; font-weight: 400;
+    transition: background 0.15s, color 0.15s;
+    position: relative; margin-bottom: 1px;
+    text-decoration: none;
+  }
+  .nav-item:hover { background: var(--bg3); color: var(--text); }
+  .nav-item.active {
+    background: var(--green-dim);
+    color: var(--accent);
+    font-weight: 500;
+    border-left: 2px solid var(--accent);
+    padding-left: 8px;
+  }
+  .nav-item svg { width: 17px; height: 17px; flex-shrink: 0; }
+  .nav-item .badge {
+    margin-left: auto; background: var(--red);
+    color: #fff; font-size: 10px; font-weight: 600;
+    border-radius: 10px; padding: 1px 6px; min-width: 18px; text-align: center;
+  }
+  .nav-item .chevron { margin-left: auto; opacity: 0.4; }
+
+  .upgrade-box {
+    margin: 12px; border-radius: 10px;
+    background: linear-gradient(135deg, rgba(74,222,128,0.12), rgba(22,163,74,0.06));
+    border: 1px solid rgba(74,222,128,0.2);
+    padding: 14px;
+  }
+  .upgrade-box h4 { font-size: 13px; font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 6px; }
+  .upgrade-box p { font-size: 11.5px; color: var(--text2); margin: 6px 0 10px; line-height: 1.5; }
+  .upgrade-btn {
+    width: 100%; padding: 8px;
+    background: var(--accent); color: #0a1a0a;
+    border: none; border-radius: 7px; font-weight: 600; font-size: 12.5px;
+    cursor: pointer; transition: opacity 0.15s;
+  }
+  .upgrade-btn:hover { opacity: 0.85; }
+
+  .user-bar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 14px 16px; border-top: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 600; font-size: 13px; color: #fff; flex-shrink: 0;
+  }
+  .user-info { flex: 1; min-width: 0; }
+  .user-info .name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .user-info .role { font-size: 11px; color: var(--text2); }
+
+  /* ── MAIN ── */
+  .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+
+  /* TOPBAR */
+  .topbar {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 24px; border-bottom: 1px solid var(--border);
+    background: var(--bg2); position: sticky; top: 0; z-index: 50;
+  }
+  .topbar-greet { flex: 1; }
+  .topbar-greet h1 { font-size: 17px; font-weight: 600; color: var(--text); }
+  .topbar-greet p { font-size: 12px; color: var(--text2); margin-top: 1px; }
+
+  .search-bar {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 8px; padding: 7px 12px; width: 220px;
+    color: var(--text2); font-size: 13px; font-family: 'DM Sans', sans-serif;
+  }
+  .search-bar input {
+    background: none; border: none; outline: none; color: var(--text);
+    font-size: 13px; width: 100%; font-family: 'DM Sans', sans-serif;
+  }
+  .search-bar input::placeholder { color: var(--text3); }
+  .kbd {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    background: var(--bg4); border: 1px solid var(--border2);
+    border-radius: 4px; padding: 1px 5px; color: var(--text3); white-space: nowrap;
+  }
+
+  .topbar-actions { display: flex; align-items: center; gap: 10px; }
+  .add-btn {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--accent); color: #0a1a0a;
+    border: none; border-radius: 8px; padding: 8px 14px;
+    font-weight: 600; font-size: 13px; cursor: pointer; transition: opacity 0.15s;
+  }
+  .add-btn:hover { opacity: 0.85; }
+
+  .icon-btn {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: var(--bg3); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--text2); transition: background 0.15s;
+    position: relative;
+  }
+  .icon-btn:hover { background: var(--bg4); color: var(--text); }
+  .icon-btn .dot {
+    position: absolute; top: 6px; right: 7px;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--red); border: 1.5px solid var(--bg2);
+  }
+
+  .user-avatar-sm {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 600; font-size: 13px; color: #fff; cursor: pointer;
+    border: 2px solid var(--border2);
+  }
+
+  /* ── PAGE ── */
+  .page { display: none; flex: 1; }
+  .page.active { display: block; }
+
+  /* DASHBOARD */
+  .dashboard-content { display: flex; }
+  .center-panel { flex: 1; padding: 20px 20px 20px 24px; min-width: 0; }
+  .right-panel {
+    width: 260px; flex-shrink: 0;
+    border-left: 1px solid var(--border);
+    padding: 20px 16px;
+    display: flex; flex-direction: column; gap: 18px;
+  }
+
+  /* METRIC CARDS */
+  .metric-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 18px;
+  }
+  .metric-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 14px 12px;
+    display: flex; align-items: flex-start; gap: 12px;
+    transition: border-color 0.2s;
+  }
+  .metric-card:hover { border-color: var(--border2); }
+  .metric-icon {
+    width: 38px; height: 38px; border-radius: 9px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .metric-icon svg { width: 20px; height: 20px; }
+  .metric-info { min-width: 0; }
+  .metric-info .label { font-size: 11px; color: var(--text2); margin-bottom: 3px; }
+  .metric-info .value { font-size: 18px; font-weight: 600; color: var(--text); line-height: 1.2; }
+  .metric-info .change { font-size: 11px; margin-top: 3px; }
+  .change.pos { color: var(--green); }
+  .change.neg { color: var(--red); }
+
+  /* CHARTS ROW */
+  .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+  .card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px;
+  }
+  .card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .card-header h3 { font-size: 14px; font-weight: 500; color: var(--text); }
+  .select-sm {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 6px; padding: 4px 8px; color: var(--text2);
+    font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+  }
+  .chart-wrap { height: 160px; position: relative; }
+
+  /* DONUT LEGEND */
+  .donut-container { display: flex; align-items: center; gap: 18px; }
+  .donut-wrap { width: 130px; height: 130px; flex-shrink: 0; position: relative; }
+  .donut-center {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .donut-center .total-label { font-size: 10px; color: var(--text2); }
+  .donut-center .total-val { font-size: 16px; font-weight: 600; color: var(--text); }
+  .donut-legend { flex: 1; }
+  .legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .legend-info { flex: 1; }
+  .legend-info .lname { font-size: 12px; color: var(--text); }
+  .legend-info .lamount { font-size: 11px; color: var(--text2); }
+  .legend-pct { font-size: 12px; font-weight: 500; color: var(--text); }
+
+  /* BOTTOM ROW */
+  .bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    font-size: 11px; font-weight: 500; color: var(--text3);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    padding: 0 0 10px; text-align: left; border-bottom: 1px solid var(--border);
+  }
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody td { padding: 10px 0; font-size: 13px; color: var(--text); }
+  .customer-cell { display: flex; align-items: center; gap: 9px; }
+  .mini-avatar {
+    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600;
+  }
+  .status-pill {
+    display: inline-block; padding: 2px 8px; border-radius: 20px;
+    font-size: 11px; font-weight: 500;
+  }
+  .pill-overdue { background: var(--red-dim); color: var(--red); }
+  .pill-partial { background: var(--yellow-dim); color: var(--yellow); }
+  .pill-unpaid { background: rgba(139,92,246,0.12); color: #a78bfa; }
+  .pill-paid { background: var(--green-dim); color: var(--green); }
+
+  .view-all {
+    display: flex; align-items: center; justify-content: center; gap: 5px;
+    padding: 10px; margin-top: 10px; border-radius: 8px;
+    border: 1px dashed var(--border); color: var(--text2);
+    font-size: 12.5px; cursor: pointer; transition: all 0.15s;
+  }
+  .view-all:hover { background: var(--bg3); color: var(--text); border-style: solid; }
+
+  /* REMINDERS */
+  .reminder-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .reminder-item:last-child { border-bottom: none; }
+  .rem-avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
+  .rem-info { flex: 1; min-width: 0; }
+  .rem-info .rname { font-size: 13px; font-weight: 500; color: var(--text); }
+  .rem-info .rdue { font-size: 11px; color: var(--text2); }
+  .rem-date { font-size: 11px; color: var(--text2); white-space: nowrap; }
+  .wa-badge {
+    display: flex; align-items: center; gap: 4px;
+    background: rgba(37,211,102,0.12); color: #25d366;
+    font-size: 10px; font-weight: 500; border-radius: 5px; padding: 2px 6px;
+  }
+
+  /* RIGHT PANEL */
+  .panel-section h3 { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 10px; }
+  .calendar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .calendar-header span { font-size: 13px; font-weight: 500; }
+  .cal-nav { display: flex; gap: 4px; }
+  .cal-btn {
+    width: 24px; height: 24px; border-radius: 5px;
+    background: var(--bg3); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--text2); font-size: 12px;
+  }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+  .cal-day-name { font-size: 10px; color: var(--text3); text-align: center; padding: 4px 0; font-weight: 500; }
+  .cal-day {
+    font-size: 11.5px; text-align: center; padding: 4px 2px; border-radius: 5px;
+    cursor: pointer; color: var(--text2); transition: background 0.1s;
+  }
+  .cal-day:hover { background: var(--bg3); color: var(--text); }
+  .cal-day.today { background: var(--accent); color: #0a1a0a; font-weight: 600; }
+  .cal-day.other { color: var(--text3); }
+
+  .event-item { display: flex; align-items: center; gap: 8px; padding: 6px 0; }
+  .event-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .event-info .etime { font-size: 11px; color: var(--text2); }
+  .event-info .etitle { font-size: 12.5px; color: var(--text); }
+
+  .open-cal-btn {
+    width: 100%; padding: 8px; border-radius: 8px;
+    background: var(--bg3); border: 1px solid var(--border);
+    color: var(--text2); font-size: 12px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    margin-top: 8px; transition: background 0.15s;
+  }
+  .open-cal-btn:hover { background: var(--bg4); color: var(--text); }
+
+  .quick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .quick-item {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 9px; padding: 10px 6px; text-align: center; cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .quick-item:hover { background: var(--bg4); border-color: var(--border2); }
+  .quick-item .qi-icon {
+    width: 28px; height: 28px; border-radius: 7px; margin: 0 auto 6px;
+    display: flex; align-items: center; justify-content: center; font-size: 15px;
+  }
+  .quick-item .qi-label { font-size: 10.5px; color: var(--text2); line-height: 1.3; }
+
+  .connected-badge {
+    display: flex; align-items: center; gap: 4px;
+    background: var(--green-dim); color: var(--green);
+    font-size: 10px; font-weight: 500; border-radius: 5px; padding: 2px 7px;
+  }
+
+  .wa-panel { background: var(--bg3); border-radius: 10px; border: 1px solid var(--border); padding: 12px; }
+  .wa-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .wa-panel-header h4 { font-size: 13px; font-weight: 500; color: var(--text); }
+  .wa-desc { font-size: 11.5px; color: var(--text2); margin-bottom: 10px; line-height: 1.5; display: flex; align-items: flex-start; gap: 8px; }
+  .wa-open-btn {
+    width: 100%; padding: 8px; background: #25d366; color: #fff;
+    border: none; border-radius: 8px; font-weight: 600; font-size: 12.5px;
+    cursor: pointer; transition: opacity 0.15s;
+  }
+  .wa-open-btn:hover { opacity: 0.85; }
+
+  /* INTEGRATIONS */
+  .integrations-bar {
+    background: var(--bg2); border-top: 1px solid var(--border);
+    padding: 14px 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .integrations-bar h3 { font-size: 13px; font-weight: 500; color: var(--text); margin-right: 4px; flex-shrink: 0; }
+  .integration-item { display: flex; align-items: center; gap: 8px; }
+  .int-icon {
+    width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--bg3); display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .int-info .iname { font-size: 12px; font-weight: 500; color: var(--text); }
+  .int-info .istatus { font-size: 11px; color: var(--green); }
+  .manage-btn {
+    margin-left: auto; padding: 6px 12px; border-radius: 7px;
+    background: var(--bg3); border: 1px solid var(--border);
+    color: var(--text2); font-size: 12px; cursor: pointer;
+  }
+
+  /* ── CUSTOMERS PAGE ── */
+  .customers-content { padding: 24px; }
+  .page-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .page-top h2 { font-size: 20px; font-weight: 600; color: var(--text); }
+  .page-top p { font-size: 13px; color: var(--text2); margin-top: 2px; }
+  .page-actions { display: flex; gap: 10px; align-items: center; }
+
+  .filter-row { display: flex; gap: 10px; margin-bottom: 18px; align-items: center; }
+  .search-input {
+    flex: 1; background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 9px 12px; color: var(--text);
+    font-size: 13px; font-family: 'DM Sans', sans-serif; outline: none;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .filter-select {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 9px 12px; color: var(--text2);
+    font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; outline: none;
+  }
+
+  .customers-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+
+  .customers-table-card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+  }
+  .table-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; border-bottom: 1px solid var(--border);
+  }
+  .table-header h3 { font-size: 14px; font-weight: 500; color: var(--text); }
+  .table-actions { display: flex; gap: 8px; }
+  .tbl-btn {
+    padding: 6px 12px; border-radius: 7px; border: 1px solid var(--border);
+    background: var(--bg3); color: var(--text2); font-size: 12px;
+    cursor: pointer; display: flex; align-items: center; gap: 5px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .tbl-btn:hover { background: var(--bg4); color: var(--text); }
+
+  .customers-table { width: 100%; border-collapse: collapse; }
+  .customers-table thead th {
+    font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase;
+    letter-spacing: 0.05em; padding: 10px 18px; text-align: left;
+    border-bottom: 1px solid var(--border); background: var(--bg3);
+  }
+  .customers-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; cursor: pointer; }
+  .customers-table tbody tr:last-child { border-bottom: none; }
+  .customers-table tbody tr:hover { background: var(--bg3); }
+  .customers-table tbody td { padding: 12px 18px; font-size: 13px; color: var(--text); }
+  .customer-row-cell { display: flex; align-items: center; gap: 10px; }
+  .cust-info .cname { font-size: 13px; font-weight: 500; color: var(--text); }
+  .cust-info .cemail { font-size: 11.5px; color: var(--text2); }
+  .amount-cell { font-family: 'DM Mono', monospace; font-size: 13px; }
+  .action-cell { display: flex; gap: 6px; }
+  .act-btn {
+    width: 28px; height: 28px; border-radius: 6px;
+    background: var(--bg3); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--text2); font-size: 13px;
+    transition: background 0.1s;
+  }
+  .act-btn:hover { background: var(--bg4); color: var(--text); }
+
+  .pagination {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 18px; border-top: 1px solid var(--border);
+    background: var(--bg3);
+  }
+  .pagination span { font-size: 12.5px; color: var(--text2); }
+  .page-btns { display: flex; gap: 4px; }
+  .page-btn {
+    width: 28px; height: 28px; border-radius: 6px;
+    background: var(--bg2); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 12.5px; color: var(--text2);
+  }
+  .page-btn.active { background: var(--accent); color: #0a1a0a; font-weight: 600; border-color: var(--accent); }
+  .page-btn:hover:not(.active) { background: var(--bg4); color: var(--text); }
+</style>
+
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">V</div>
+    <span class="logo-text">DebtTrack Pro</span>
+  </div>
+  <nav class="nav">
+    <div class="nav-label">Main</div>
+    <a class="nav-item active" onclick="showPage('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a class="nav-item" onclick="showPage('customers')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.85"/></svg>
+      Customers
+    </a>
+    <a class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z"/><path d="M12 6v6l4 2"/></svg>
+      Debts
+      <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </a>
+    <a class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      Payments
+    </a>
+    <a class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Reminders
+      <span class="badge">3</span>
+    </a>
+    <a class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Calendar
+    </a>
+    <div class="nav-label" style="margin-top:8px">Reports</div>
+    <a class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Reports & Analytics
+    </a>
+    <a class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Receipts
+    </a>
+    <div class="nav-label" style="margin-top:8px">Settings</div>
+    <a class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Staff & Roles
+    </a>
+    <a class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M22 12h-2M2 12h2"/></svg>
+      Business Settings
+    </a>
+    <a class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      Integrations
+    </a>
+    <a class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Logs
+    </a>
+  </nav>
+  <div class="upgrade-box">
+    <h4>⬆ Upgrade to Pro</h4>
+    <p>Unlock advanced features and grow your business.</p>
+    <button class="upgrade-btn">Upgrade Now</button>
+  </div>
+  <div class="user-bar">
+    <div class="avatar">AM</div>
+    <div class="user-info">
+      <div class="name">Alex Morgan</div>
+      <div class="role">Host</div>
+    </div>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5a6275" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+  </div>
+</div>
+
+<div class="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-greet">
+      <h1 id="page-title">Welcome back, Alex! 👋</h1>
+      <p id="page-sub">Here's what's happening with your business today.</p>
+    </div>
+    <div class="search-bar">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Search anything..."/>
+      <span class="kbd">⌘K</span>
+    </div>
+    <div class="topbar-actions">
+      <button class="add-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add New
+      </button>
+      <div class="icon-btn">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="icon-btn">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="dot"></span>
+      </div>
+      <div class="user-avatar-sm">AM</div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD PAGE -->
+  <div class="page active" id="page-dashboard">
+    <div class="dashboard-content">
+      <div class="center-panel">
+        <!-- METRICS -->
+        <div class="metric-grid">
+          <div class="metric-card">
+            <div class="metric-icon" style="background:rgba(59,130,246,0.12)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="metric-info">
+              <div class="label">Total Customers</div>
+              <div class="value">1,248</div>
+              <div class="change pos">+12 this month</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon" style="background:rgba(245,158,11,0.12)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            </div>
+            <div class="metric-info">
+              <div class="label">Total Debt (Outstanding)</div>
+              <div class="value">$54,320</div>
+              <div class="change pos">+8.5% this month</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon" style="background:rgba(34,197,94,0.12)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.8"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+            <div class="metric-info">
+              <div class="label">Total Recovered</div>
+              <div class="value">$32,450</div>
+              <div class="change pos">+14.2% this month</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon" style="background:rgba(239,68,68,0.12)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div class="metric-info">
+              <div class="label">Overdue Debt</div>
+              <div class="value">$12,870</div>
+              <div class="change neg">+5.3% this month</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon" style="background:rgba(168,85,247,0.12)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            </div>
+            <div class="metric-info">
+              <div class="label">Today's Collection</div>
+              <div class="value">$1,245</div>
+              <div class="change pos">+18.7% vs yesterday</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHARTS ROW -->
+        <div class="charts-row">
+          <div class="card">
+            <div class="card-header">
+              <h3>Debt Overview</h3>
+              <select class="select-sm"><option>This Month</option><option>Last Month</option><option>This Year</option></select>
+            </div>
+            <div class="chart-wrap"><canvas id="lineChart"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Debt Status</h3></div>
+            <div class="donut-container">
+              <div class="donut-wrap"><canvas id="donutChart"></canvas>
+                <div class="donut-center"><div class="total-label">Total</div><div class="total-val">$54,320</div></div>
+              </div>
+              <div class="donut-legend">
+                <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div><div class="legend-info"><div class="lname">Paid</div><div class="lamount">$32,450</div></div><span class="legend-pct">59.7%</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div><div class="legend-info"><div class="lname">Partial</div><div class="lamount">$11,650</div></div><span class="legend-pct">21.5%</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div><div class="legend-info"><div class="lname">Overdue</div><div class="lamount">$10,220</div></div><span class="legend-pct">18.8%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTTOM ROW -->
+        <div class="bottom-row">
+          <div class="card">
+            <div class="card-header">
+              <h3>Recent Debts</h3>
+            </div>
+            <table>
+              <thead><tr><th>Customer</th><th>Amount</th><th>Due Date</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td><div class="customer-cell"><div class="mini-avatar" style="background:rgba(99,102,241,0.15);color:#818cf8">JD</div>John Doe</div></td><td style="font-family:'DM Mono',monospace">$2,500</td><td style="color:#8a94a8">May 20, 2025</td><td><span class="status-pill pill-overdue">overdue</span></td></tr>
+                <tr><td><div class="customer-cell"><div class="mini-avatar" style="background:rgba(236,72,153,0.15);color:#f472b6">SJ</div>Sarah Johnson</div></td><td style="font-family:'DM Mono',monospace">$1,200</td><td style="color:#8a94a8">May 25, 2025</td><td><span class="status-pill pill-partial">partial</span></td></tr>
+                <tr><td><div class="customer-cell"><div class="mini-avatar" style="background:rgba(34,197,94,0.12);color:#4ade80">MB</div>Michael Brown</div></td><td style="font-family:'DM Mono',monospace">$3,800</td><td style="color:#8a94a8">May 28, 2025</td><td><span class="status-pill pill-unpaid">unpaid</span></td></tr>
+                <tr><td><div class="customer-cell"><div class="mini-avatar" style="background:rgba(245,158,11,0.12);color:#fbbf24">ED</div>Emily Davis</div></td><td style="font-family:'DM Mono',monospace">$950</td><td style="color:#8a94a8">Jun 2, 2025</td><td><span class="status-pill pill-unpaid">unpaid</span></td></tr>
+                <tr><td><div class="customer-cell"><div class="mini-avatar" style="background:rgba(168,85,247,0.12);color:#c084fc">DW</div>David Wilson</div></td><td style="font-family:'DM Mono',monospace">$1,750</td><td style="color:#8a94a8">Jun 5, 2025</td><td><span class="status-pill pill-partial">partial</span></td></tr>
+              </tbody>
+            </table>
+            <div class="view-all">View all debts →</div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3>Upcoming Reminders</h3>
+              <span style="font-size:12px;color:#3b82f6;cursor:pointer">View All</span>
+            </div>
+            <div class="reminder-item">
+              <div class="rem-avatar" style="background:rgba(99,102,241,0.15);color:#818cf8">JD</div>
+              <div class="rem-info"><div class="rname">John Doe</div><div class="rdue">Payment due in 2 days</div></div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+                <div class="wa-badge"><span style="font-size:12px">📱</span> WhatsApp</div>
+                <div class="rem-date">May 18</div>
+              </div>
+            </div>
+            <div class="reminder-item">
+              <div class="rem-avatar" style="background:rgba(236,72,153,0.15);color:#f472b6">SJ</div>
+              <div class="rem-info"><div class="rname">Sarah Johnson</div><div class="rdue">Payment due in 5 days</div></div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+                <div class="wa-badge"><span style="font-size:12px">📱</span> WhatsApp</div>
+                <div class="rem-date">May 21</div>
+              </div>
+            </div>
+            <div class="reminder-item">
+              <div class="rem-avatar" style="background:rgba(34,197,94,0.12);color:#4ade80">MB</div>
+              <div class="rem-info"><div class="rname">Michael Brown</div><div class="rdue">Payment due in 7 days</div></div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+                <div class="wa-badge"><span style="font-size:12px">📱</span> WhatsApp</div>
+                <div class="rem-date">May 23</div>
+              </div>
+            </div>
+            <div class="reminder-item">
+              <div class="rem-avatar" style="background:rgba(245,158,11,0.12);color:#fbbf24">ED</div>
+              <div class="rem-info"><div class="rname">Emily Davis</div><div class="rdue">Payment due in 9 days</div></div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+                <div class="wa-badge"><span style="font-size:12px">📱</span> WhatsApp</div>
+                <div class="rem-date">May 25</div>
+              </div>
+            </div>
+            <div class="view-all">View all reminders →</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL -->
+      <div class="right-panel">
+        <div class="panel-section">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <h3>Google Calendar</h3>
+            <span class="connected-badge">✓ Connected</span>
+          </div>
+          <div class="calendar-header">
+            <span>May 2025</span>
+            <div style="display:flex;align-items:center;gap:6px">
+              <div class="cal-nav">
+                <div class="cal-btn">‹</div>
+                <div class="cal-btn">›</div>
+              </div>
+              <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:11px;cursor:pointer;color:var(--text2)">Today</div>
+            </div>
+          </div>
+          <div class="cal-grid">
+            <div class="cal-day-name">S</div><div class="cal-day-name">M</div><div class="cal-day-name">T</div><div class="cal-day-name">W</div><div class="cal-day-name">T</div><div class="cal-day-name">F</div><div class="cal-day-name">S</div>
+            <div class="cal-day other">27</div><div class="cal-day other">28</div><div class="cal-day other">29</div><div class="cal-day other">30</div><div class="cal-day">1</div><div class="cal-day">2</div><div class="cal-day">3</div>
+            <div class="cal-day">4</div><div class="cal-day">5</div><div class="cal-day">6</div><div class="cal-day">7</div><div class="cal-day">8</div><div class="cal-day">9</div><div class="cal-day">10</div>
+            <div class="cal-day">11</div><div class="cal-day">12</div><div class="cal-day">13</div><div class="cal-day">14</div><div class="cal-day">15</div><div class="cal-day today">16</div><div class="cal-day">17</div>
+            <div class="cal-day">18</div><div class="cal-day">19</div><div class="cal-day">20</div><div class="cal-day">21</div><div class="cal-day">22</div><div class="cal-day">23</div><div class="cal-day">24</div>
+            <div class="cal-day">25</div><div class="cal-day">26</div><div class="cal-day">27</div><div class="cal-day">28</div><div class="cal-day">29</div><div class="cal-day">30</div><div class="cal-day">31</div>
+          </div>
+          <div style="margin-top:10px">
+            <div class="event-item"><div class="event-dot" style="background:#3b82f6"></div><div class="event-info"><div class="etime">10:00 AM</div><div class="etitle">Meeting with John Doe</div></div></div>
+            <div class="event-item"><div class="event-dot" style="background:#ef4444"></div><div class="event-info"><div class="etime">12:30 PM</div><div class="etitle">Payment Reminder – Sarah</div></div></div>
+            <div class="event-item"><div class="event-dot" style="background:#a855f7"></div><div class="event-info"><div class="etime">2:00 PM</div><div class="etitle">Team Review</div></div></div>
+          </div>
+          <button class="open-cal-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Open in Google Calendar
+          </button>
+        </div>
+
+        <div class="panel-section">
+          <h3>Quick Actions</h3>
+          <div class="quick-grid">
+            <div class="quick-item"><div class="qi-icon" style="background:rgba(59,130,246,0.12);color:#3b82f6">👤</div><div class="qi-label">Add Customer</div></div>
+            <div class="quick-item"><div class="qi-icon" style="background:rgba(245,158,11,0.12);color:#f59e0b">💳</div><div class="qi-label">Add Debt</div></div>
+            <div class="quick-item"><div class="qi-icon" style="background:rgba(168,85,247,0.12);color:#a855f7">💰</div><div class="qi-label">Record Payment</div></div>
+            <div class="quick-item"><div class="qi-icon" style="background:rgba(37,211,102,0.12);color:#25d366">📱</div><div class="qi-label">Send Reminder</div></div>
+            <div class="quick-item"><div class="qi-icon" style="background:rgba(34,197,94,0.12);color:#22c55e">🧾</div><div class="qi-label">Generate Receipt</div></div>
+            <div class="quick-item"><div class="qi-icon" style="background:rgba(239,68,68,0.12);color:#ef4444">📊</div><div class="qi-label">View Reports</div></div>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <div class="wa-panel">
+            <div class="wa-panel-header">
+              <h4>WhatsApp Integration</h4>
+              <span class="connected-badge">✓ Connected</span>
+            </div>
+            <div class="wa-desc">
+              <span style="font-size:22px">💬</span>
+              <span>Send reminders, receipts and updates directly on WhatsApp.</span>
+            </div>
+            <button class="wa-open-btn">Open WhatsApp</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTEGRATIONS BAR -->
+    <div class="integrations-bar">
+      <h3>Integrations</h3>
+      <div class="integration-item"><div class="int-icon">G</div><div class="int-info"><div class="iname">Google Account</div><div class="istatus">✓ Connected</div></div></div>
+      <div class="integration-item"><div class="int-icon">📅</div><div class="int-info"><div class="iname">Google Calendar</div><div class="istatus">✓ Connected</div></div></div>
+      <div class="integration-item"><div class="int-icon">💬</div><div class="int-info"><div class="iname">WhatsApp Business</div><div class="istatus">✓ Connected</div></div></div>
+      <div class="integration-item"><div class="int-icon">✉</div><div class="int-info"><div class="iname">Email Service</div><div class="istatus">✓ Connected</div></div></div>
+      <button class="manage-btn">⚙ Manage Integrations</button>
+    </div>
+  </div>
+
+  <!-- CUSTOMERS PAGE -->
+  <div class="page" id="page-customers">
+    <div class="customers-content">
+      <div class="page-top">
+        <div><h2>Customers</h2><p>Manage and track all your customers and their debts.</p></div>
+        <div class="page-actions">
+          <button class="tbl-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <button class="add-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Customer
+          </button>
+        </div>
+      </div>
+
+      <div class="customers-stats">
+        <div class="metric-card">
+          <div class="metric-icon" style="background:rgba(59,130,246,0.12)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          </div>
+          <div class="metric-info"><div class="label">Total Customers</div><div class="value">1,248</div><div class="change pos">+12 this month</div></div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:rgba(239,68,68,0.12)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>
+          </div>
+          <div class="metric-info"><div class="label">Overdue Customers</div><div class="value">186</div><div class="change neg">+8 this week</div></div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:rgba(34,197,94,0.12)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.8"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="metric-info"><div class="label">Cleared This Month</div><div class="value">342</div><div class="change pos">+24 this month</div></div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:rgba(245,158,11,0.12)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="metric-info"><div class="label">Partial Payers</div><div class="value">214</div><div class="change pos">−5 this week</div></div>
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <div style="flex:1;display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5a6275" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Search customers by name, email or phone..." style="background:none;border:none;outline:none;color:var(--text);font-size:13px;width:100%;font-family:'DM Sans',sans-serif"/>
+        </div>
+        <select class="filter-select"><option>All Status</option><option>Overdue</option><option>Partial</option><option>Unpaid</option><option>Cleared</option></select>
+        <select class="filter-select"><option>All Amounts</option><option>Under $500</option><option>$500–$2k</option><option>Over $2k</option></select>
+        <button class="tbl-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          Filters
+        </button>
+      </div>
+
+      <div class="customers-table-card">
+        <div class="table-header">
+          <h3>All Customers <span style="font-size:12px;color:var(--text2);font-weight:400;margin-left:6px">1,248 total</span></h3>
+          <div class="table-actions">
+            <button class="tbl-btn">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+              Sort
+            </button>
+            <button class="tbl-btn">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+              Columns
+            </button>
+          </div>
+        </div>
+        <table class="customers-table">
+          <thead>
+            <tr>
+              <th style="width:32px"><input type="checkbox" style="accent-color:var(--accent)"/></th>
+              <th>Customer</th><th>Phone</th><th>Total Debt</th><th>Paid</th><th>Balance</th><th>Last Payment</th><th>Status</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="customers-tbody"></tbody>
+        </table>
+        <div class="pagination">
+          <span>Showing 1–10 of 1,248 customers</span>
+          <div class="page-btns">
+            <div class="page-btn">‹</div>
+            <div class="page-btn active">1</div>
+            <div class="page-btn">2</div>
+            <div class="page-btn">3</div>
+            <div class="page-btn">…</div>
+            <div class="page-btn">125</div>
+            <div class="page-btn">›</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (name === 'dashboard') {
+    document.getElementById('page-title').textContent = 'Welcome back, Alex! 👋';
+    document.getElementById('page-sub').textContent = "Here's what's happening with your business today.";
+  } else if (name === 'customers') {
+    document.getElementById('page-title').textContent = 'Customers';
+    document.getElementById('page-sub').textContent = 'Manage and track all your customers and their debts.';
+  }
+}
+
+const customers = [
+  {initials:'JD',color:'#818cf8',bg:'rgba(99,102,241,0.15)',name:'John Doe',email:'john.doe@gmail.com',phone:'+1 555-0101',debt:'$2,500.00',paid:'$0.00',balance:'$2,500.00',last:'—',status:'overdue'},
+  {initials:'SJ',color:'#f472b6',bg:'rgba(236,72,153,0.15)',name:'Sarah Johnson',email:'sarah.j@outlook.com',phone:'+1 555-0142',debt:'$1,200.00',paid:'$600.00',balance:'$600.00',last:'May 10, 2025',status:'partial'},
+  {initials:'MB',color:'#4ade80',bg:'rgba(34,197,94,0.12)',name:'Michael Brown',email:'m.brown@yahoo.com',phone:'+1 555-0198',debt:'$3,800.00',paid:'$0.00',balance:'$3,800.00',last:'—',status:'unpaid'},
+  {initials:'ED',color:'#fbbf24',bg:'rgba(245,158,11,0.12)',name:'Emily Davis',email:'emily.d@gmail.com',phone:'+1 555-0210',debt:'$950.00',paid:'$0.00',balance:'$950.00',last:'—',status:'unpaid'},
+  {initials:'DW',color:'#c084fc',bg:'rgba(168,85,247,0.12)',name:'David Wilson',email:'dwilson@corp.com',phone:'+1 555-0231',debt:'$1,750.00',paid:'$875.00',balance:'$875.00',last:'May 8, 2025',status:'partial'},
+  {initials:'LC',color:'#67e8f9',bg:'rgba(6,182,212,0.12)',name:'Laura Chen',email:'lchen@tech.io',phone:'+1 555-0302',debt:'$5,200.00',paid:'$5,200.00',balance:'$0.00',last:'May 14, 2025',status:'paid'},
+  {initials:'RM',color:'#fb923c',bg:'rgba(251,146,60,0.12)',name:'Robert Martinez',email:'r.martinez@mail.com',phone:'+1 555-0388',debt:'$680.00',paid:'$0.00',balance:'$680.00',last:'—',status:'overdue'},
+  {initials:'AP',color:'#a78bfa',bg:'rgba(139,92,246,0.12)',name:'Amanda Parker',email:'amanda.p@works.net',phone:'+1 555-0421',debt:'$2,100.00',paid:'$2,100.00',balance:'$0.00',last:'May 12, 2025',status:'paid'},
+  {initials:'KT',color:'#34d399',bg:'rgba(52,211,153,0.12)',name:'Kevin Thomas',email:'kthomas@biz.com',phone:'+1 555-0499',debt:'$3,300.00',paid:'$1,000.00',balance:'$2,300.00',last:'May 6, 2025',status:'partial'},
+  {initials:'NW',color:'#f87171',bg:'rgba(248,113,113,0.12)',name:'Nina White',email:'n.white@personal.com',phone:'+1 555-0533',debt:'$420.00',paid:'$0.00',balance:'$420.00',last:'—',status:'overdue'},
+];
+
+const pillMap = {overdue:'pill-overdue',partial:'pill-partial',unpaid:'pill-unpaid',paid:'pill-paid'};
+const tbody = document.getElementById('customers-tbody');
+customers.forEach(c => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><input type="checkbox" style="accent-color:var(--accent)"/></td>
+    <td><div class="customer-row-cell">
+      <div class="mini-avatar" style="background:${c.bg};color:${c.color};width:32px;height:32px;font-size:12px">${c.initials}</div>
+      <div class="cust-info"><div class="cname">${c.name}</div><div class="cemail">${c.email}</div></div>
+    </div></td>
+    <td style="color:var(--text2)">${c.phone}</td>
+    <td class="amount-cell">${c.debt}</td>
+    <td class="amount-cell" style="color:var(--green)">${c.paid}</td>
+    <td class="amount-cell" style="color:${c.balance==='$0.00'?'var(--text2)':'var(--text)'}">${c.balance}</td>
+    <td style="color:var(--text2)">${c.last}</td>
+    <td><span class="status-pill ${pillMap[c.status]}">${c.status}</span></td>
+    <td><div class="action-cell">
+      <div class="act-btn" title="View">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+      <div class="act-btn" title="Edit">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+      <div class="act-btn" title="Send reminder">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </div>
+    </div></td>`;
+  tbody.appendChild(tr);
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  const lineCtx = document.getElementById('lineChart').getContext('2d');
+  new Chart(lineCtx, {
+    type: 'line',
+    data: {
+      labels: ['May 1','May 6','May 11','May 16','May 21','May 26','May 31'],
+      datasets: [
+        {label:'Total Debt',data:[38000,41000,44500,48250,50000,52000,54320],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.05)',borderWidth:2,pointBackgroundColor:'#3b82f6',pointRadius:3,tension:0.4},
+        {label:'Recovered',data:[18000,21000,24000,29350,30000,31000,32450],borderColor:'#22c55e',backgroundColor:'rgba(34,197,94,0.05)',borderWidth:2,pointBackgroundColor:'#22c55e',pointRadius:3,tension:0.4},
+        {label:'Overdue',data:[5000,6200,7800,9820,10500,11500,12870],borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,0.05)',borderWidth:2,pointBackgroundColor:'#ef4444',pointRadius:3,tension:0.4},
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#8a94a8',font:{size:11},boxWidth:10,padding:12}}},
+      scales:{
+        x:{ticks:{color:'#5a6275',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}},
+        y:{ticks:{color:'#5a6275',font:{size:10},callback:v=>'$'+v.toLocaleString()},grid:{color:'rgba(255,255,255,0.04)'}}
+      }
+    }
+  });
+
+  const donutCtx = document.getElementById('donutChart').getContext('2d');
+  new Chart(donutCtx, {
+    type: 'doughnut',
+    data: {
+      labels:['Paid','Partial','Overdue'],
+      datasets:[{data:[32450,11650,10220],backgroundColor:['#22c55e','#f59e0b','#ef4444'],borderColor:'#161b27',borderWidth:3,hoverOffset:4}]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:true, cutout:'72%',
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' $'+ctx.raw.toLocaleString()}}}
+    }
+  });
+});
+</script>
